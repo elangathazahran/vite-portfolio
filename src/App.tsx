@@ -10,6 +10,7 @@ import Skills from './assets/components/Skills'
 import Portfolio from './assets/components/Portfolio'
 import Contact from './assets/components/Contact'
 import Footer from './assets/components/Footer'
+import BackToTop from './assets/components/BackToTop'
 
 function App() {
 
@@ -41,6 +42,9 @@ function App() {
 
       {/* Footer Section */}
       <Footer />
+
+      {/* back to top */}
+      <BackToTop />
     </>
   )
 }

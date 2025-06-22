@@ -308,7 +308,7 @@ input:checked+.slider:before {
 /* Hero Section */
 .hero {
   position: relative;
-  height: 100vh;
+  height: 100dvh;
   min-height: 600px;
   display: flex;
   align-items: center;
@@ -329,7 +329,7 @@ input:checked+.slider:before {
 .hero-content {
   position: relative;
   z-index: 1;
-  max-width: 800px;
+  max-width: 100%;
   padding: 0 20px;
 }
 
@@ -345,7 +345,7 @@ input:checked+.slider:before {
 }
 
 .hero-subtitle {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   color: var(--text-secondary);
   display: inline;
 }
@@ -465,13 +465,16 @@ input:checked+.slider:before {
   justify-content: center;
   gap: 1rem;
   background-color: var(--card-bg);
-  width: 200px;
-  height: 200px;
+  width: 160px;
+  height: 160px;
   border-radius: 10px;
+  transition: var(--transition);
+  padding: 1rem;
 }
 
 .card img {
-  width: 90px;
+  width: 80px;
+  max-width: 100%;
   filter: grayscale(1);
   transition: var(--transition);
 }
@@ -481,13 +484,25 @@ input:checked+.slider:before {
   transform: scale(1.2);
 }
 
-@keyframes scroll {
-  0% {
-    transform: translateX(0);
+@media screen and (max-width: 768px) {
+  .card {
+    width: 140px;
+    height: 140px;
   }
 
-  100% {
-    transform: translateX(calc(-250px * 8));
+  .card img {
+    width: 60px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .card {
+    width: 120px;
+    height: 120px;
+  }
+
+  .card img {
+    width: 50px;
   }
 }
 

@@ -18,11 +18,27 @@ function Skills() {
     useEffect(() => {
         const swiper = new (window as any).Swiper('.mySwiper', {
             slidesPerView: 5,
-            spaceBetween: 0,
+            spaceBetween: 20,
             loop: true,
             freeMode: true,
             grabCursor: true,
             allowTouchMove: true,
+
+            // ✅ Responsiveness
+            breakpoints: {
+                320: {
+                    slidesPerView: 2,
+                },
+                480: {
+                    slidesPerView: 3,
+                },
+                768: {
+                    slidesPerView: 4,
+                },
+                1024: {
+                    slidesPerView: 5,
+                }
+            },
         });
 
         let autoplay = true;
@@ -32,7 +48,6 @@ function Skills() {
         function smoothAutoplay() {
             if (autoplay) {
                 currentProgress += speed;
-
                 if (currentProgress >= 0.999) {
                     currentProgress = 0;
                     swiper.slideToLoop(0, 500);

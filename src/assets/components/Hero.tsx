@@ -37,21 +37,27 @@ function Hero() {
         }
 
         // Typed.js
+        let typedInstance: any;
+
         if ((window as any).Typed) {
-            new (window as any).Typed('.typing', {
+            typedInstance = new (window as any).Typed('.typing', {
                 strings: ['Junior Fullstack Web Developer', 'UI/UX Designer', 'Freelancer'],
                 typeSpeed: 50,
                 backSpeed: 30,
                 loop: true,
-            })
+            });
         }
+
+        return () => {
+            if (typedInstance) typedInstance.destroy();
+        };
     }, [])
     return (
         <section id="home" className="hero">
             <div id="particles-js"></div>
             <div className="hero-content">
-                <h1 className="hero-title">Hi, I'm <span>Elang Atha</span></h1>
-                <p className="hero-subtitle">I am a, <span className="typing"></span></p>
+                <h1 className="hero-title">Hi, I'm <span>Elang Atha👋</span></h1>
+                <p className="hero-subtitle">I'm a, <span className="typing"></span></p>
                 <div className="hero-buttons">
                     <a href="#portfolio" className="btn">View My Work</a>
                     <a href="#contact" className="btn btn-outline">Contact Me</a>

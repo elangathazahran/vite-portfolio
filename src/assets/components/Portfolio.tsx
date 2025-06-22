@@ -1,12 +1,11 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import "../../App.css";
+import { useEffect, useState } from "react";
+import '../../App.css'
 
-import ReactJsPortfolio from "../images/react portfolio.png";
-import Certiport from "../images/certiport.jpg";
-import Gmetrix from "../images/gmtrix.jpg";
-import BudgetTracker from "../images/budget_tracker.png";
-import FeIntership from "../images/PKL.jpg";
+import ReactJsPortfolio from '../images/react portfolio.png'
+import Certiport from '../images/certiport.jpg'
+import Gmetrix from '../images/gmtrix.jpg'
+import BudgetTracker from '../images/budget_tracker.png'
+import FeIntership from '../images/PKL.jpg'
 
 type PortfolioItem = {
     title: string;
@@ -51,24 +50,61 @@ const portfolioData: PortfolioItem[] = [
         codeLink: "https://github.com/elangathazahran/budget-tracker",
     },
     {
-        title: "Frontend Web Dev Internship",
-        description:
-            "6-month internship at PT Kreasi Sawala Nusantara as Frontend Developer - built responsive UIs and collaborated in teams.",
+        title: "Frontend Web Developer Internship",
+        description: "Intern at PT Kreasi Sawala Nusantara (6 mo) | Responsive UI & teamwork.",
         category: "certifications",
         image: FeIntership,
         badge: "Certification",
     },
 ];
 
-const categories = ["all", "web", "freelance", "certifications"];
-
 function Portfolio() {
-    const [activeCategory, setActiveCategory] = useState("all");
     const [zoomImage, setZoomImage] = useState<string | null>(null);
 
-    const filteredData = activeCategory === "all"
-        ? portfolioData
-        : portfolioData.filter((item) => item.category === activeCategory);
+    useEffect(() => {
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const portfolioItems = document.querySelectorAll('.portfolio-item');
+        const portfolioGrid = document.querySelector('.portfolio-grid');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                const filterValue = button.getAttribute('data-filter');
+
+                const calculateDelay = (index: number) => {
+                    const row = Math.floor(index / 3);
+                    const col = index % 3;
+                    return (row * 0.1) + (col * 0.05);
+                };
+
+                portfolioItems.forEach((item, index) => {
+                    const matches = filterValue === 'all' || item.getAttribute('data-category') === filterValue;
+                    if (item.classList.contains('active') && !matches) {
+                        item.setAttribute('style', `transition-delay: ${calculateDelay(index)}s`);
+                        item.classList.add('exit');
+                        item.classList.remove('active');
+                    }
+                });
+
+                setTimeout(() => {
+                    portfolioItems.forEach((item, index) => {
+                        const matches = filterValue === 'all' || item.getAttribute('data-category') === filterValue;
+                        item.classList.remove('exit');
+                        if (matches) {
+                            item.setAttribute('style', `transition-delay: ${calculateDelay(index)}s`);
+                            setTimeout(() => item.classList.add('active'), 50);
+                        } else {
+                            item.classList.remove('active');
+                        }
+                    });
+
+                    void (portfolioGrid as HTMLElement)?.offsetWidth;
+                }, 500);
+            });
+        });
+    }, []);
 
     return (
         <>
@@ -76,70 +112,58 @@ function Portfolio() {
                 <div className="container">
                     <h2 className="section-title">My <span>Portfolio</span></h2>
 
+                    {/* Filter Buttons */}
                     <div className="portfolio-filter">
-                        {categories.map((cat) => (
-                            <button
-                                key={cat}
-                                className={`filter-btn ${activeCategory === cat ? "active" : ""}`}
-                                onClick={() => setActiveCategory(cat)}
-                            >
-                                {cat.charAt(0).toUpperCase() + cat.slice(1)}
-                            </button>
-                        ))}
+                        <button className="filter-btn active" data-filter="all">All Projects</button>
+                        <button className="filter-btn" data-filter="web">Web Developments</button>
+                        <button className="filter-btn" data-filter="freelance">Freelances</button>
+                        <button className="filter-btn" data-filter="certifications">Certifications</button>
                     </div>
 
-                    <div className="portfolio-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
-                        <AnimatePresence>
-                            {filteredData.map((item, index) => (
-                                <motion.div
-                                    key={item.title}
-                                    className="portfolio-item active"
-                                    data-category={item.category}
-                                    initial={{ opacity: 0, scale: 0.8, y: 30 }}
-                                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                                    exit={{ opacity: 0, scale: 0.5, y: 20 }}
-                                    transition={{ duration: 0.4, delay: index * 0.1 }}
-                                >
-                                    <div className="portfolio-card">
-                                        <div className="portfolio-img">
-                                            <img src={item.image} alt={item.title} />
-                                            <div className="portfolio-badge">{item.badge}</div>
-                                        </div>
-                                        <div className="portfolio-overlay">
-                                            <div className="overlay-content">
-                                                <h3>{item.title}</h3>
-                                                <small>{item.description}</small>
-                                                <div className="portfolio-links">
-                                                    {item.demoLink && (
-                                                        <a href={item.demoLink} target="_blank" rel="noopener noreferrer" className="portfolio-link" title="Live Demo">
-                                                            <i className="fas fa-link"></i>
-                                                        </a>
-                                                    )}
-                                                    {item.codeLink && (
-                                                        <a href={item.codeLink} target="_blank" rel="noopener noreferrer" className="portfolio-link" title="Source Code">
-                                                            <i className="fab fa-github"></i>
-                                                        </a>
-                                                    )}
-                                                    {!item.demoLink && !item.codeLink && (
-                                                        <button
-                                                            onClick={() => setZoomImage(item.image)}
-                                                            className="portfolio-link"
-                                                            title="Lihat Gambar"
-                                                        >
-                                                            <i className="fas fa-eye"></i>
-                                                        </button>
-                                                    )}
-                                                </div>
+                    {/* Portfolio Grid */}
+                    <div className="portfolio-grid">
+                        {portfolioData.map((item, index) => (
+                            <div key={index} className="portfolio-item active" data-category={item.category}>
+                                <div className="portfolio-card">
+                                    <div className="portfolio-img">
+                                        <img src={item.image} alt={item.title} />
+                                        <div className="portfolio-badge">{item.badge}</div>
+                                    </div>
+                                    <div className="portfolio-overlay">
+                                        <div className="overlay-content">
+                                            <h3>{item.title}</h3>
+                                            <p>{item.description}</p>
+                                            <div className="portfolio-links">
+                                                {item.demoLink && (
+                                                    <a href={item.demoLink} target="_blank" rel="noopener noreferrer" className="portfolio-link" title="Live Demo">
+                                                        <i className="fas fa-link"></i>
+                                                    </a>
+                                                )}
+                                                {item.codeLink && (
+                                                    <a href={item.codeLink} target="_blank" rel="noopener noreferrer" className="portfolio-link" title="Source Code">
+                                                        <i className="fab fa-github"></i>
+                                                    </a>
+                                                )}
+                                                {!item.demoLink && !item.codeLink && (
+                                                    <button
+                                                        onClick={() => setZoomImage(item.image)}
+                                                        className="portfolio-link"
+                                                        title="Lihat Gambar"
+                                                    >
+                                                        <i className="fas fa-eye"></i>
+                                                    </button>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
-                                </motion.div>
-                            ))}
-                        </AnimatePresence>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </section>
 
+            {/* Zoom Modal */}
             {zoomImage && (
                 <div className="zoom-modal" style={{
                     display: 'flex',
@@ -166,20 +190,6 @@ function Portfolio() {
                     <img src={zoomImage} alt="Zoom" style={{ maxWidth: '90%', maxHeight: '90%' }} />
                 </div>
             )}
-
-            <section className="hire-banner">
-                <div className="container">
-                    <h1 className="hire-title">🚀Available for Freelance Projects!</h1>
-                    <p className="hire-text">
-                        Looking for a dedicated and creative developer? Let's work together!
-                    </p>
-                    <div className="btn-group">
-                        <a href="https://wa.me/6287788612930" target="_blank" className="btn">
-                            <i className="fa-brands fa-whatsapp"></i> hire me
-                        </a>
-                    </div>
-                </div>
-            </section>
         </>
     );
 }
