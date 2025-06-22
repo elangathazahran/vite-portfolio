@@ -308,7 +308,7 @@ input:checked+.slider:before {
 /* Hero Section */
 .hero {
   position: relative;
-  height: 100dvh;
+  height: 100vh;
   min-height: 600px;
   display: flex;
   align-items: center;
