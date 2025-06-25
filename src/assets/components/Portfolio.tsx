@@ -190,6 +190,20 @@ function Portfolio() {
                     <img src={zoomImage} alt="Zoom" style={{ maxWidth: '90%', maxHeight: '90%' }} />
                 </div>
             )}
+
+            <section className="hire-banner">
+                <div className="container">
+                    <h1 className="hire-title">🚀Available for Freelance Projects!</h1>
+                    <p className="hire-text">
+                        Looking for a dedicated and creative developer? Let's work together!
+                    </p>
+                    <div className="btn-group">
+                        <a href="https://wa.me/6287788612930" target="_blank" className="btn">
+                            <i className="fa-brands fa-whatsapp"></i> hire me
+                        </a>
+                    </div>
+                </div>
+            </section>
         </>
     );
 }
