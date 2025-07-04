@@ -958,6 +958,7 @@ input:checked+.slider:before {
   text-align: center;
   background-color: var(--card-bg);
   padding: 3rem 2rem;
+  margin: 0 20px;
   border-radius: 10px;
 }
 
